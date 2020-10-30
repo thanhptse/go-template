@@ -1,0 +1,2 @@
+environment: ${ENVIRONMENT}
+service_name: ${SERVICE_NAME}
