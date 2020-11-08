@@ -3,6 +3,7 @@ package server
 import (
 	"net"
 	"net/http"
+	"os"
 
 	"github.com/thanhptse/go-template/config"
 	"github.com/thanhptse/go-template/handler"
@@ -33,7 +34,7 @@ func (s *Server) Init() {
 }
 
 func (s *Server) ListenHTTP() error {
-	address := ":4000"
+	address := ":" + os.Getenv("PORT")
 	listen, err := net.Listen("tcp", address)
 	if err != nil {
 		panic(err)

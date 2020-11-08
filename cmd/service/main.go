@@ -1,12 +1,25 @@
 package main
 
 import (
+	"flag"
+
+	"github.com/thanhptse/go-template/config"
 	"github.com/thanhptse/go-template/server"
 	"go.uber.org/zap"
 )
 
 func main() {
-	s, err := server.NewServer(nil)
+	var configFile string
+	flag.StringVar(&configFile, "config-file", "", "Specify config file path")
+	flag.Parse()
+
+	cfg, err := config.Load(configFile)
+	if err != nil {
+		zap.S().Errorf("load config failed")
+		panic(err)
+	}
+
+	s, err := server.NewServer(cfg)
 	if err != nil {
 		zap.S().Errorf("Create server failed with err %v", err)
 		panic(err)
