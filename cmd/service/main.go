@@ -2,6 +2,9 @@ package main
 
 import (
 	"flag"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/thanhptse/go-template/config"
 	"github.com/thanhptse/go-template/server"
@@ -12,6 +15,8 @@ func main() {
 	var configFile string
 	flag.StringVar(&configFile, "config-file", "", "Specify config file path")
 	flag.Parse()
+
+	defer WaitOSSignal()
 
 	cfg, err := config.Load(configFile)
 	if err != nil {
@@ -31,4 +36,11 @@ func main() {
 		zap.S().Errorf("Start server failed with err %v", err)
 		panic(err)
 	}
+}
+
+func WaitOSSignal() {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	s := <-c
+	zap.S().Infof("Receive os.Signal: %s", s.String())
 }

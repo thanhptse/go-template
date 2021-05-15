@@ -20,6 +20,8 @@ func Load(filePath string) (*AppConfig, error) {
 		filePath = os.Getenv("CONFIG-FILE")
 	}
 
+	sugar := zap.S()
+	sugar.Debug("Load config ...")
 	zap.S().Debugf("CONFIG_FILE=%v", filePath)
 
 	configBytes, err := ioutil.ReadFile(filePath)

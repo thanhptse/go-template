@@ -7,6 +7,8 @@ import (
 
 	"github.com/thanhptse/go-template/config"
 	"github.com/thanhptse/go-template/handler"
+	"github.com/thanhptse/go-template/pkg/contxt"
+	"github.com/thanhptse/go-template/pkg/middleware"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -20,6 +22,11 @@ type Server struct {
 
 func NewServer(cfg *config.AppConfig) (*Server, error) {
 	router := gin.New()
+
+	router.Use(middleware.SetRequestID())
+	router.Use(contxt.SetupAppContext())
+	router.Use(middleware.SetupLog())
+	router.Use(gin.Recovery())
 
 	s := &Server{
 		router: router,
